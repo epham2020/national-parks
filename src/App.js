@@ -7,9 +7,9 @@ function App() {
       <Router>
         <Navigation />
         <Switch>
-          <Route path="/" exact component={() => <Home />} />
-          <Route path="/about" exact component={() => <Parks />} />
-          <Route path="/contact" exact component={() => <Activities />} />
+          <Route path="/national-parks" exact component={() => <Home />} />
+          <Route path="/national-parks/parks" exact component={() => <Parks />} />
+          <Route path="/national-parks/activities" exact component={() => <Activities />} />
         </Switch>
         <Footer />
       </Router>
