@@ -6,7 +6,7 @@ function Navigation(props) {
     <div className="navigation">
       <nav class="navbar navbar-expand navbar-dark bg-warning">
         <div class="container">
-          <Link class="navbar-brand" to="/">
+          <Link class="navbar-brand" to="/national-parks">
             National Park Service
           </Link>
 
@@ -14,29 +14,29 @@ function Navigation(props) {
             <ul class="navbar-nav ml-auto">
               <li
                 class={`nav-item  ${
-                  props.location.pathname === "/" ? "active" : ""
+                  props.location.pathname === "/national-parks" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/">
+                <Link class="nav-link" to="/national-parks">
                   Home
                   <span class="sr-only">(current)</span>
                 </Link>
               </li>
               <li
                 class={`nav-item  ${
-                  props.location.pathname === "/about" ? "active" : ""
+                  props.location.pathname === "/national-parks/parks" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/about">
+                <Link class="nav-link" to="/national-parks/parks">
                   Parks
                 </Link>
               </li>
               <li
                 class={`nav-item  ${
-                  props.location.pathname === "/contact" ? "active" : ""
+                  props.location.pathname === "/national-parks/activities" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/contact">
+                <Link class="nav-link" to="/national-parks/activities">
                   Activities
                 </Link>
               </li>
