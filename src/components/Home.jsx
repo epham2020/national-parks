@@ -4,7 +4,9 @@ function Home() {
   return (
     <div className="home">
       <div class="container">
+        {/* top row that contains a picture on the left and tab header with small description on right */}
         <div class="row align-items-center my-5">
+          {/* left column contains a picture with caption underneath */}
           <div class="col-lg-7">
             <img
               class="img-fluid rounded mb-4 mb-lg-0"
@@ -13,6 +15,7 @@ function Home() {
             />
             <figcaption>Great Smoky Mountains</figcaption>
           </div>
+          {/* right column contains tab header with small description underneath */}
           <div class="col-lg-5">
             <h1 class="font-weight-light">Find Your Adventure</h1>
             <p>

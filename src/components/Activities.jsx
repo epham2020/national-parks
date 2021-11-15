@@ -12,25 +12,25 @@ async function getActivities() {
   const { data } = datas;
 
   //map that maps the activity to a list of national park names
-  var activToNameDict = {}
+  var activToNameDict = {};
 
   //map that maps the activity to a list of national park codes
-  var activToCodeDict = {}
+  var activToCodeDict = {};
 
   for (var i in data){
-    var fullNameArray = []
-    var parkCodeArray = []
+    var fullNameArray = [];
+    var parkCodeArray = [];
 
     //for each activity, add the fullName to fullNameArray and parkCode to parkCode array only if a National Park designation
-    const { parks } = data[i]
+    const { parks } = data[i];
     for (var j in parks){
       if (parks[j].designation === "National Park"){
-        fullNameArray.push(parks[j].fullName)
-        parkCodeArray.push(parks[j].parkCode)
+        fullNameArray.push(parks[j].fullName);
+        parkCodeArray.push(parks[j].parkCode);
       }
     }
-    activToNameDict[data[i].name] = fullNameArray
-    activToCodeDict[data[i].name] = parkCodeArray
+    activToNameDict[data[i].name] = fullNameArray;
+    activToCodeDict[data[i].name] = parkCodeArray;
   }
 
   //create a list of the keys to iterate over
@@ -38,7 +38,7 @@ async function getActivities() {
  
   //for each activity, create a button
   for (let n=0;n<activArray.length;n++) {  
-   let activ = activArray[n]
+   let activ = activArray[n];
    var v = document.createElement('input');
    v.type="button";
    v.value=activ;
@@ -138,6 +138,7 @@ async function getInformation(button, parkCode) {
     captionArray.push(images[indImage].caption);
   }
 
+  //links element to HTML display
   document.getElementById('url').innerHTML = "<b>Link</b>:</br> " + url;
   document.getElementById('fullName').innerHTML = "<b>Name</b>: " + fullName;
   document.getElementById('states').innerHTML = "<b>State</b>: " + states;
@@ -148,29 +149,34 @@ async function getInformation(button, parkCode) {
   document.getElementById('email').innerHTML = "<b>Email</b>:</br> " + emailAdd.join(' ');
   document.getElementById('hours').innerHTML = "<b>Hours</b>:</br> " + hours.join(' ');
 
+  //Links image, title, caption element to display
   document.getElementById('image').innerHTML = "";
+
   for (var z=0; z<imageArray.length;z++){
+      //appends image to element
     var newImage = new Image(1237, 696);
     newImage.src = imageArray[z];
     newImage.style = "margin-left: 15px; margin-bottom: 15px";
     document.getElementById('image').appendChild(newImage);
 
+    //appends bolded title to element
     var newTitleBold = document.createElement('strong');
     var newTitle = document.createTextNode(titleArray[z] + ": ");
     newTitleBold.appendChild(newTitle);
     document.getElementById('image').appendChild(newTitleBold);
 
+    //appends caption to element
     var newCaption = document.createTextNode(captionArray[z]);
     document.getElementById('image').appendChild(newCaption);
 
     var br = document.createElement("br");
     document.getElementById('image').appendChild(br);
 
+    //appends line breaks to element
     var empty = document.createElement("pre");
     var newLine = document.createTextNode('\n\n\n');
     empty.appendChild(newLine);
     document.getElementById('image').appendChild(empty);
-
 
   }
 
@@ -180,18 +186,21 @@ async function getInformation(button, parkCode) {
 function Activities() {
 
   getActivities();
-  //getActivities();
+
   return (
     <div className="activities">
       <div class="container">
+        {/* top row that contains a picture on the left and tab header with small description on right */}
         <div class="row align-items-center my-5">
           <div class="col-lg-7">
+            {/* image on the left */}
             <img
               class="img-fluid rounded mb-4 mb-lg-0"
               src="https://www.antilogvacations.com/Images/Home/Subdestinations/International/International-Alaska-GlacierBayNationalPark.jpg"
               alt=""
             />
           </div>
+          {/* tab header with small description on right */}
           <div class="col-lg-5">
             <h1 class="font-weight-light">Activities</h1>
             <p>
@@ -199,16 +208,20 @@ function Activities() {
             </p>
           </div>
         </div>
+        {/* next row that contains text instructions, as well as activity  buttons */}
         <div class="row align-items-center my-5">
           <p>
             <p style={{'fontSize': '25px', color: '#8bc34a', 'fontFamily': 'Rockwell'}}>
               <u style={{color: '#8bc34a'}}>Click an activity to find out which parks offer it</u><br />
             </p>
+            {/* adds activity buttons to the web page */}
             <span id="acts"></span><br /><br />
             <u style={{color: '#8bc34a'}}><span style={{'fontSize': '25px', color: '#8bc34a', 'fontFamily': 'Rockwell'}} id="indAct"></span></u><br /><br />
+            {/* adds list of national park buttons when activity clicked */}
             <span id="list"></span><br />
           </p>
         </div>
+        {/* this row pulls up the informational page about a national park when it is clicked */}
         <div class="row align-items-center my-5">
           <p>
             <p style={{'text-align': 'center'}}>
@@ -219,8 +232,8 @@ function Activities() {
             <span id="description"></span><br /><br />
           </p>
         </div> 
+        {/* coordinates, url, and activities list in left column, phone, email, and hours in the right column */}
         <div class="row align-items-baseline my-5">
-        
           <div class="col-lg-7">
             <p>
               <span id="latLong"></span><br /><br />
@@ -235,13 +248,14 @@ function Activities() {
               <span id="hours"></span><br /><br />
             </p>
           </div>
-          
         </div>
+        {/* bottom row displays image, title, caption elements */}
         <div class="row align-items-center my-5">
           <p>
             <span id="image"></span><br /><br />
           </p>
         </div>
+        {/* empty space so footer doesn't cover text */}
         <div class="row align-items-center my-5">
           <p>
             <br /><br /><br /><br />

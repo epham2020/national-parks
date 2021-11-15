@@ -3,7 +3,7 @@ import React from "react";
 /**
  * getParks fetches webcam data from the NPS API, creating a mapping of park name to image url, caption, and title
  * 
- * @param {*} updateFunc 
+ * @param {*} updateFunc updates state of React component
  */
 async function getParks(updateFunc) {
 
@@ -21,7 +21,7 @@ async function getParks(updateFunc) {
       //only pull images that correspond to national parks
       if (relatedParks[m].designation === "National Park"){
         if (images.length > 0){
-          //if national park has not been iterated over before, create new key in each dictionary
+          //if national park has not been iterated over before, create new key with value as a list in mappings
           if (!(relatedParks[m].fullName in imgDict)){
             var keyList = [];
             var titList = [];
@@ -138,12 +138,13 @@ getImages(e) {
     
     let selectedPark;
 
-
       return (
         <div className="parks">
           <div class="container">
+            {/* top row that contains a picture on the left and tab header with small description on right */}
             <div class="row align-items-center my-5">
               <div class="col-lg-7">
+                {/* image on left with caption underneath */}
                 <img
                   class="img-fluid rounded mb-4 mb-lg-0"
                   src="https://bluemountainbb.com/wp-content/uploads/2020/08/bigstock-Logan-pass-8194883-900x400.jpg"
@@ -152,6 +153,7 @@ getImages(e) {
                 <figcaption>Glacier National Park</figcaption>
     
               </div>
+              {/* tab header + description to the right of the image */}
               <div class="col-lg-5" style={{padding: 0}}>
                 <h1 class="font-weight-light">Parks</h1>
                 <p>
@@ -159,6 +161,7 @@ getImages(e) {
                 </p>
               </div>
             </div>
+            {/* row cotains instruction header, and a drop down menu */}
             <div class="row align-items-center my-5" style={{padding: 0}}>
               <p style={{'fontSize': '25px', color: '#8bc34a', 'fontFamily': 'Rockwell'}}>
                 <u style={{color: '#b66611'}}>Click from available National Parks to view non streaming webcam photos</u><br />
@@ -169,7 +172,6 @@ getImages(e) {
                   })}
               </select>
 
-
             </div>
             <div class="row align-items-center my-5">
               <div class="col-lg-5" style={{padding: 0}}>
@@ -177,10 +179,12 @@ getImages(e) {
                 <u style={{color: '#b66611'}}>Images</u><br />
               </p>
                 <p>
+                  {/* obtains the images, along with their caption and title */}
                   <span id="lst"></span><br /><br />
                 </p>
               </div>
             </div>
+            {/* empty row so footer does not cover up text */}
             <div class="row align-items-center my-5">
               <p>
                 <br /><br /><br /><br />
@@ -191,7 +195,5 @@ getImages(e) {
       );
     }
   }
-
-  
 
 export default Parks;
