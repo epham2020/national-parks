@@ -1,19 +1,27 @@
-
 import React from "react";
 
+/**
+ * getParks fetches webcam data from the NPS API, creating a mapping of park name to image url, caption, and title
+ * 
+ * @param {*} updateFunc 
+ */
 async function getParks(updateFunc) {
 
+  //initialize image, title, and caption mappings
   var imgDict = {};
   var titleDict = {};
   var captionDict = {};
 
+  //fetches and only pulls API data that is needed
   const webcams = await fetch('https://developer.nps.gov/api/v1/webcams?limit=192&api_key=ZXXr1uUYZgQP6dKgYSEcuW71p5YxXU1f3ioeYPtW');
   const camData = await webcams.json();
   for (var l in camData.data){
     const { relatedParks, images } = camData.data[l];
     for (var m in relatedParks){
+      //only pull images that correspond to national parks
       if (relatedParks[m].designation === "National Park"){
         if (images.length > 0){
+          //if national park has not been iterated over before, create new key in each dictionary
           if (!(relatedParks[m].fullName in imgDict)){
             var keyList = [];
             var titList = [];
@@ -27,6 +35,8 @@ async function getParks(updateFunc) {
             titleDict[relatedParks[m].fullName] = titList;
             captionDict[relatedParks[m].fullName] = capList;
           }
+
+          //if national npark has been iterated over before, add data to corresponding list
           else{
             imgDict[relatedParks[m].fullName].push(images[0].url)
             titleDict[relatedParks[m].fullName].push(images[0].title)
@@ -37,6 +47,7 @@ async function getParks(updateFunc) {
     }
   }
   
+  //create keys list for each data set for easy accessing
   var imgList = Object.keys(imgDict);
   var titleList = Object.keys(titleDict);
   var captionList = Object.keys(captionDict);
@@ -44,7 +55,9 @@ async function getParks(updateFunc) {
   updateFunc(imgDict, imgList, titleDict, titleList, captionDict, captionList);
 }
 
-
+/**
+ * class that creates React component for the image URL, title and caption data
+ */
 class Parks extends React.Component {
   
   constructor() {
@@ -71,10 +84,16 @@ class Parks extends React.Component {
       selectedPark: null,
     };
     
+    //call getImages with image, title, caption data
     this.getImages = this.getImages.bind(this);
   }
-  // getParks();
 
+/**
+ * getImages displays each image corresponding to the national park with a title and caption
+ * beneath it
+ * 
+ * @param {*} e encapsulates URL, title, caption data
+ */
 getImages(e) {
 
     if (!(e && e.target && e.target.value && this.state && this.state.imgDict)) {
@@ -85,27 +104,29 @@ getImages(e) {
     var indTitle = this.state.titleDict[e.target.value]
     var indCaption = this.state.captionDict[e.target.value]
 
+    //resets display each time called
     document.getElementById('lst').innerHTML = "";
   
+    //for each image
     for (var i=0; i<imgURL.length;i++){
+
+      //add image to element
       var image = new Image(700,300);
       image.src = imgURL[i];
       image.style = "margin-left: 15px; margin-bottom: 15px";
       document.getElementById('lst').appendChild(image);
 
+      //add bolded title to element
       var newTitleBold = document.createElement('strong');
-      console.log(indTitle);
       var newTitle = document.createTextNode(indTitle[i] + ": ");
-
       newTitleBold.appendChild(newTitle);
       document.getElementById('lst').appendChild(newTitleBold);
 
+      //add caption to element
       var newCaption = document.createTextNode(indCaption[i]);
       document.getElementById('lst').appendChild(newCaption);
-
-      var br = document.createElement("br");
-      document.getElementById('lst').appendChild(br);
   
+      //add line breaks to element
       var empty = document.createElement("pre");
       var newLine = document.createTextNode('\n\n\n');
       empty.appendChild(newLine);
