@@ -4,12 +4,12 @@ import { Link, withRouter } from "react-router-dom";
 function Navigation(props) {
   return (
     <div className="navigation">
-      <nav class="navbar navbar-expand navbar-dark bg-warning">
+      <nav class="navbar navbar-expand navbar-dark" style={{"background-color": "#228b22"}}>
         <div class="container">
           <Link class="navbar-brand" to="/national-parks">
-            National Park Service
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/US-NationalParkService-Logo.svg/1200px-US-NationalParkService-Logo.svg.png" width="40" height="auto" alt=""></img>
+            &nbsp;&nbsp;&nbsp;National Park Service
           </Link>
-
           <div>
             <ul class="navbar-nav ml-auto">
               <li

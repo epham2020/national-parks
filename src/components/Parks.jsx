@@ -4,6 +4,8 @@ import React from "react";
 async function getParks(updateFunc) {
 
   var imgDict = {};
+  var titleDict = {};
+  var captionDict = {};
 
   const webcams = await fetch('https://developer.nps.gov/api/v1/webcams?limit=192&api_key=ZXXr1uUYZgQP6dKgYSEcuW71p5YxXU1f3ioeYPtW');
   const camData = await webcams.json();
@@ -14,11 +16,21 @@ async function getParks(updateFunc) {
         if (images.length > 0){
           if (!(relatedParks[m].fullName in imgDict)){
             var keyList = [];
+            var titList = [];
+            var capList = [];
+
             keyList.push(images[0].url);
+            titList.push(images[0].title);
+            capList.push(images[0].caption);
+
             imgDict[relatedParks[m].fullName] = keyList;
+            titleDict[relatedParks[m].fullName] = titList;
+            captionDict[relatedParks[m].fullName] = capList;
           }
           else{
             imgDict[relatedParks[m].fullName].push(images[0].url)
+            titleDict[relatedParks[m].fullName].push(images[0].title)
+            captionDict[relatedParks[m].fullName].push(images[0].caption)
           }
         }
       }
@@ -26,8 +38,10 @@ async function getParks(updateFunc) {
   }
   
   var imgList = Object.keys(imgDict);
+  var titleList = Object.keys(titleDict);
+  var captionList = Object.keys(captionDict);
 
-  updateFunc(imgDict, imgList);
+  updateFunc(imgDict, imgList, titleDict, titleList, captionDict, captionList);
 }
 
 
@@ -36,16 +50,24 @@ class Parks extends React.Component {
   constructor() {
 
     super();
-    getParks((imgDict, imgList) => {
+    getParks((imgDict, imgList, titleDict, titleList, captionDict, captionList) => {
       this.setState({
         imgDict:imgDict,
         imgList: imgList,
+        titleDict: titleDict,
+        titleList: titleList,
+        captionDict: captionDict,
+        captionList: captionList
       })
     });
 
     this.state = {
       imgDict: {},
       imgList: [],
+      titleDict: {},
+      titleList: [],
+      captionDict: {},
+      captionList: [],
       selectedPark: null,
     };
     
@@ -60,12 +82,34 @@ getImages(e) {
     }
 
     var imgURL = this.state.imgDict[e.target.value]
+    var indTitle = this.state.titleDict[e.target.value]
+    var indCaption = this.state.captionDict[e.target.value]
+
     document.getElementById('lst').innerHTML = "";
   
     for (var i=0; i<imgURL.length;i++){
       var image = new Image(700,300);
       image.src = imgURL[i];
+      image.style = "margin-left: 15px; margin-bottom: 15px";
       document.getElementById('lst').appendChild(image);
+
+      var newTitleBold = document.createElement('strong');
+      console.log(indTitle);
+      var newTitle = document.createTextNode(indTitle[i] + ": ");
+
+      newTitleBold.appendChild(newTitle);
+      document.getElementById('lst').appendChild(newTitleBold);
+
+      var newCaption = document.createTextNode(indCaption[i]);
+      document.getElementById('lst').appendChild(newCaption);
+
+      var br = document.createElement("br");
+      document.getElementById('lst').appendChild(br);
+  
+      var empty = document.createElement("pre");
+      var newLine = document.createTextNode('\n\n\n');
+      empty.appendChild(newLine);
+      document.getElementById('lst').appendChild(empty);
     }
   }
 
@@ -94,10 +138,9 @@ getImages(e) {
                 </p>
               </div>
             </div>
-            <div class="row align-items-center my-5">
-              <p>
-                <u>Click from available National Parks to view non streaming webcam photos</u><br />
-                <span id="acts"></span><br /><br />
+            <div class="row align-items-center my-5" style={{padding: 0}}>
+              <p style={{'fontSize': '25px', color: '#8bc34a', 'fontFamily': 'Rockwell'}}>
+                <u style={{color: '#b66611'}}>Click from available National Parks to view non streaming webcam photos</u><br />
               </p>
               <select name="parks" id="parksDropdown" value={selectedPark} onChange={this.getImages}>
                   {this.state.imgList.map((val) => {
@@ -109,8 +152,10 @@ getImages(e) {
             </div>
             <div class="row align-items-center my-5">
               <div class="col-lg-5" style={{padding: 0}}>
+              <p style={{'fontSize': '25px', color: '#8bc34a', 'fontFamily': 'Rockwell'}}>
+                <u style={{color: '#b66611'}}>Images</u><br />
+              </p>
                 <p>
-                  <u>Images</u><br />
                   <span id="lst"></span><br /><br />
                 </p>
               </div>
